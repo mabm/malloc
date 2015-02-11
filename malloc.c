@@ -5,7 +5,7 @@
 ** Login   <jobertomeu@epitech.net>
 ** 
 ** Started on  Thu Feb  5 11:11:33 2015 Joris Bertomeu
-** Last update Wed Feb 11 14:11:51 2015 Joris Bertomeu
+** Last update Wed Feb 11 14:57:31 2015 Viveka BARNEAUD
 */
 
 #include	<math.h>
@@ -15,21 +15,21 @@
 static		t_malloc	*freep = NULL;
 static		pthread_mutex_t	mutex_malloc = PTHREAD_MUTEX_INITIALIZER;
 
-void		show_list(t_malloc *ptr, char *str)
-{
-  t_malloc	*tmp = ptr;
+/* void		show_list(t_malloc *ptr, char *str) */
+/* { */
+/*   t_malloc	*tmp = ptr; */
 
-  printf("---------- %s ----------\n", str);
-  while (tmp)
-    {
-      printf("Size :\t\t%d\n", tmp->size);
-      printf("Origi:\t\t%d\n", tmp->original);
-      printf("Ptr. :\t\t%p\n", tmp->ptr);
-      printf("Next :\t\t%p\n", tmp->next);
-      tmp = tmp->next;
-      printf("-------\n");
-    }
-}
+/*   printf("---------- %s ----------\n", str); */
+/*   while (tmp) */
+/*     { */
+/*       printf("Size :\t\t%d\n", tmp->size); */
+/*       printf("Origi:\t\t%d\n", tmp->original); */
+/*       printf("Ptr. :\t\t%p\n", tmp->ptr); */
+/*       printf("Next :\t\t%p\n", tmp->next); */
+/*       tmp = tmp->next; */
+/*       printf("-------\n"); */
+/*     } */
+/* } */
 
 void	my_putchar(char c)
 {
@@ -181,7 +181,6 @@ void		*calloc(size_t nmemb, size_t size)
 
 void		free(void *ptr)
 {
-  t_header	*header;
   t_malloc	*tmp;
   int		size = 0;
 
