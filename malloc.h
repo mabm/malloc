@@ -5,7 +5,7 @@
 ** Login   <jobertomeu@epitech.net>
 ** 
 ** Started on  Thu Feb  5 11:12:32 2015 Joris Bertomeu
-** Last update Wed Feb 11 14:18:42 2015 Joris Bertomeu
+** Last update Sun Feb 15 16:17:17 2015 Joris Bertomeu
 */
 
 #ifndef		_MALLOC_H_
@@ -15,11 +15,12 @@
 # include	<stdlib.h>
 # include	<stdio.h>
 # include	<string.h>
+# include	<math.h>
+# include	<pthread.h>
 
 typedef	struct	s_malloc
 {
   size_t	size;
-  size_t	original;
   void		*ptr;
   void		*next;
 }		t_malloc;
