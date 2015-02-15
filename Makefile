@@ -5,12 +5,14 @@
 ## Login   <barnea_v@epitech.net>
 ## 
 ## Started on  Wed Feb 11 14:41:51 2015 Viveka BARNEAUD
-## Last update Wed Feb 11 14:57:46 2015 Viveka BARNEAUD
+## Last update Sun Feb 15 16:40:59 2015 Viveka BARNEAUD
 ##
 
 NAME=		libmy_malloc_$(HOSTTYPE).so
 
-SRC=		malloc.c
+SRC=		malloc.c		\
+		realloc.c		\
+		calloc.c		\
 
 OBJ=		$(SRC:.c=.o)
 

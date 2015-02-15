@@ -5,21 +5,12 @@
 ** Login   <jobertomeu@epitech.net>
 ** 
 ** Started on  Thu Feb  5 11:11:33 2015 Joris Bertomeu
-** Last update Sun Feb 15 16:17:12 2015 Joris Bertomeu
+** Last update Sun Feb 15 16:43:03 2015 Viveka BARNEAUD
 */
 
 #include	"malloc.h"
 
-static		t_malloc	*freep = NULL;
-
-size_t		calc_requested_size(size_t size)
-{
-  size_t	ret = getpagesize();
-
-  while (ret < size)
-    ret += getpagesize();
-  return (ret);
-}
+static		t_malloc	*g_freep = NULL;
 
 void		*new_alloc(size_t size)
 {
@@ -28,7 +19,7 @@ void		*new_alloc(size_t size)
   t_malloc	*tmpf;
   size_t	request;
 
-  tmpf = freep;
+  tmpf = g_freep;
   request = calc_requested_size(size);
   ptr = sbrk(request);
   nodef = ptr;
@@ -41,8 +32,8 @@ void		*new_alloc(size_t size)
   nodef->size = request - size;
   nodef->ptr = ptr - sizeof(t_malloc) + size;
   nodef->next = NULL;
-  if (!freep)
-    freep = nodef;
+  if (!g_freep)
+    g_freep = nodef;
   else
     tmpf->next = nodef;
   return (ptr + sizeof(t_header));
@@ -61,51 +52,27 @@ void		*search_in_freep(size_t size)
 {
   t_malloc	*tmp;
 
-  tmp = freep;
+  tmp = g_freep;
   while (tmp)
     {
-      if (tmp->size >= size) {
+      if (tmp->size >= size)
      	return (crop_in_freep(size, tmp));
-      }
       tmp = tmp->next;
     }
   return (new_alloc(size));
 }
 
-void	*malloc(size_t size)
+void		*malloc(size_t size)
 {
   void	*ptr;
 
   if (!size)
     return (NULL);
   size = size + sizeof(t_header) + sizeof(t_malloc);
-  if (!freep)
+  if (!g_freep)
     ptr = new_alloc(size);
   else
     ptr = search_in_freep(size);
-  return (ptr);
-}
-
-void		*realloc(void *ptr, size_t size)
-{
-  void		*tmp;
-
-  if (!ptr)
-    return (malloc(size));
-  if (!(tmp = malloc(size)))
-    return (NULL);
-  memcpy(tmp, ptr, ((t_header*) (ptr - sizeof(t_header)))->size);
-  free(ptr);
-  return (tmp);
-}
-
-void		*calloc(size_t nmemb, size_t size)
-{
-  void		*ptr;
-
-  if (!(ptr = malloc(nmemb * size)))
-    return (NULL);
-  bzero(ptr, nmemb * size);
   return (ptr);
 }
 
@@ -117,15 +84,17 @@ void		free(void *ptr)
   if (!ptr)
     return;
   size = ((t_header*) (ptr - sizeof(t_header)))->size + sizeof(t_header);
-  tmp = freep;
-  while (tmp && tmp->next) {
-    if (ptr - sizeof(t_header) == tmp->ptr - size) {
-      tmp->size += size;
-      tmp->ptr -= size + sizeof(t_malloc);
-      return;
+  tmp = g_freep;
+  while (tmp && tmp->next)
+    {
+      if (ptr - sizeof(t_header) == tmp->ptr - size)
+	{
+	  tmp->size += size;
+	  tmp->ptr -= size + sizeof(t_malloc);
+	  return;
+	}
+      tmp = tmp->next;
     }
-    tmp = tmp->next;
-  }
   tmp->next = ptr - sizeof(t_malloc) - sizeof(t_header);
   ((t_malloc*) tmp->next)->size = size;
   ((t_malloc*) tmp->next)->ptr = ptr - sizeof(t_header);
